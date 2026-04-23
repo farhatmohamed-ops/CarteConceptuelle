@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
     <head>
@@ -209,4 +210,217 @@
     </script>
 </body>  
     </body>
+=======
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>المفعول المطلق</title>
+        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+        <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #eef9ff;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 { color: #6c5ce7; }
+
+        /* منطقة البطاقات القابلة للسحب (الإجابات) */
+        .options-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 3px dashed #ffcc00;
+        }
+
+        .draggable {
+            background-color: #4facfe;
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            cursor: grab;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 4px #00a8ff;
+            max-width: 200px;
+            user-select: none;
+            transition: transform 0.2s;
+        }
+
+        .draggable:active {
+            cursor: grabbing;
+            transform: scale(0.95);
+        }
+
+        /* تصميم الخريطة المفاهيمية */
+        .mind-map {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* المركز (المفعول المطلق) */
+        .center-node {
+            background-color: #ff6b6b;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 5px #ee5253;
+            grid-column: 2;
+            grid-row: 2;
+            height: 100px;
+        }
+
+        /* الأماكن الفارغة (أهداف الإسقاط) */
+        .drop-zone {
+            background-color: #f1f2f6;
+            border: 3px dashed #ced6e0;
+            border-radius: 15px;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            transition: 0.3s;
+        }
+
+        .drop-zone.drag-over {
+            background-color: #dff9fb;
+            border-color: #686de0;
+        }
+
+        .drop-zone.correct {
+            border: 3px solid #6BCB77; /* أخضر للإجابة الصحيحة */
+            background-color: white;
+        }
+
+        .drop-zone.wrong {
+            animation: shake 0.5s;
+            border-color: #ff4757;
+        }
+
+        /* تأثير اهتزاز للإجابة الخاطئة */
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+
+        /* زر العودة */
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 10px 20px;
+            background: #2c3e50;
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+    </style>
+    </head>
+    <body>
+      <h1>لعبة خريطة "المفعول المطلق" 🎯</h1>
+    <p>اسحب البطاقات من الأعلى وضعها في المكان المناسب لإكمال الخريطة المفاهيمية!</p>
+
+    <div class="options-container" id="options">
+        <div class="draggable" draggable="true" id="def">هو اسم مصدر يشتق من لفظ الفعل...</div>
+        <div class="draggable" draggable="true" id="i3rab">إعرابه: المفعول المطلق منصوب دائمًا</div>
+        <div class="draggable" draggable="true" id="form">يرد مفردة أو مركبًا إضافيًا أو نعتيًا</div>
+        <div class="draggable" draggable="true" id="type1">يبين نوع الفعل (مثال: ضحك الأطفال ضحكًا عميقًا)</div>
+        <div class="draggable" draggable="true" id="type2">يبين عدد المرات (مثال: ربح المتسابق ثلاث مرات)</div>
+        <div class="draggable" draggable="true" id="type3">لتوكيد الفعل (مثال: كتبت سلمى كتابة سريعة)</div>
+    </div>
+
+    <div class="mind-map">
+        <div class="drop-zone" data-expected="type1"></div> <div class="drop-zone" data-expected="def"></div> <div class="drop-zone" data-expected="i3rab"></div> <div class="drop-zone" data-expected="type2"></div> <div class="center-node">المفعول المطلق</div> <div class="drop-zone" data-expected="form"></div> <div class="drop-zone" data-expected="type3"></div> <div></div> <div></div> </div>
+
+    <a href="index.html" class="back-btn">العودة إلى الصفحة الرئيسية 🏠</a>
+
+    <script>
+        const draggables = document.querySelectorAll('.draggable');
+        const dropZones = document.querySelectorAll('.drop-zone');
+
+        // أحداث السحب للبطاقات
+        draggables.forEach(draggable => {
+            draggable.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text-id', draggable.id);
+                setTimeout(() => { draggable.style.opacity = '0.5'; }, 0);
+            });
+
+            draggable.addEventListener('dragend', () => {
+                draggable.style.opacity = '1';
+            });
+        });
+
+        // أحداث الإسقاط للمربعات الفارغة
+        dropZones.forEach(zone => {
+            zone.addEventListener('dragover', (e) => {
+                e.preventDefault(); // السماح بالإسقاط
+                zone.classList.add('drag-over');
+            });
+
+            zone.addEventListener('dragleave', () => {
+                zone.classList.remove('drag-over');
+            });
+
+            zone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                zone.classList.remove('drag-over');
+                
+                const draggedId = e.dataTransfer.getData('text-id');
+                const expectedId = zone.getAttribute('data-expected');
+                const draggedElement = document.getElementById(draggedId);
+
+                // التحقق من الإجابة
+                if (draggedId === expectedId) {
+                    // إجابة صحيحة
+                    zone.appendChild(draggedElement);
+                    zone.classList.add('correct');
+                    draggedElement.setAttribute('draggable', 'false'); // قفل البطاقة
+                    draggedElement.style.boxShadow = "none";
+                    draggedElement.style.cursor = "default";
+                    checkWin();
+                } else {
+                    // إجابة خاطئة
+                    zone.classList.add('wrong');
+                    setTimeout(() => {
+                        zone.classList.remove('wrong');
+                    }, 500);
+                }
+            });
+        });
+
+        // دالة للتحقق مما إذا كان التلميذ قد أكمل كل الخريطة
+        function checkWin() {
+            const correctZones = document.querySelectorAll('.drop-zone.correct');
+            if(correctZones.length === 6) { // لدينا 6 بطاقات في هذا المثال
+                setTimeout(() => {
+                    alert("أحسنت أيها البطل! لقد أكملت الخريطة المفاهيمية بنجاح! 🏆🌟");
+                }, 300);
+            }
+        }
+    </script>
+</body>  
+    </body>
+>>>>>>> eea1864 (first commit)
 </html>
