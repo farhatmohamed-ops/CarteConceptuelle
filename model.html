@@ -1,11 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>المفعول المطلق</title>
-        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لعبة الخريطة المفاهيمية</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
 
@@ -14,7 +12,7 @@
             --main-color: #1976D2;
             --accent-color: #FF9800;
             --success-color: #4CAF50;
-            --home-color: #FF6B6B; 
+            --home-color: #FF6B6B; /* Couleur corail pour le bouton retour */
             --text-dark: #2C3E50;
         }
 
@@ -32,11 +30,11 @@
             position: relative;
         }
 
-
+        /* --- NOUVEAU : Style du bouton Retour --- */
         .home-btn {
             position: absolute;
             top: 20px;
-            left: 20px; 
+            left: 20px; /* À gauche car le site est en RTL */
             text-decoration: none;
             background-color: var(--home-color);
             color: white;
@@ -56,6 +54,7 @@
             box-shadow: 0 3px 0 #D32F2F;
         }
 
+        /* --- Reste du style --- */
         .answers-pool {
             background: white;
             padding: 20px;
@@ -102,10 +101,6 @@
             align-items: center;
             justify-content: center;
             transform: translate(-50%, -50%);
-            white-space: pre-wrap;     
-            max-width: 220px;          
-            line-height: 1.5;          
-            font-size: 0.9rem;         
         }
 
         .node-main {
@@ -188,13 +183,11 @@
             title: "خريطة المفعول المطلق",
             mainTopic: "المفعول المطلق",
             elements: [
-                { text: "منصوب", hint:"إعراب المفعول المطلق ... دائما", x: "25%", y: "15%" }, 
-                { text: "مصدر الفعل", hint:"يصاغ المفعول المطلق من ...", x: "75%", y: "15%" },
-                { text: "المفاعيل الخمسة", hint:"هو اسم مصدر يشتق من لفظ الفعل.\n هو أحد ...\n يعد أحد متممات الجملة.", x: "20%", y: "45%" },
-                { text: "مفردة", hint:"يرد ... أو مركبا إضافيا أو نعتيا أو بالتمييز", x: "85%", y: "45%" },
-                { text: "ضحك الأطفال ضحكًا عميقًا", hint:"مفعول مطلق يبين نوع الفعل.\n مثال: \n ...", x: "15%", y: "82%" },
-                { text: "كتبت سلمى كتابة سريعة", hint:"مفعول مطلق لتوكيد الفعل\n مثال :\n ...", x: "50%", y: "85%" },
-                { text: "ربح المتسابق ثلاث مرات", hint:"مفعول مطلق يبين عدد مرات وقوع الفعل.\n مثال:\n ...", x: "85%", y: "82%" }
+                { text: "منصوب", x: "20%", y: "20%" },
+                { text: "مصدر الفعل", x: "80%", y: "20%" },
+                { text: "لتوكيد الفعل", x: "15%", y: "80%" },
+                { text: "لبيان النوع", x: "50%", y: "85%" },
+                { text: "لبيان العدد", x: "85%", y: "80%" }
             ]
         };
 
@@ -222,7 +215,7 @@
                 zone.className = 'node drop-zone';
                 zone.style.left = el.x;
                 zone.style.top = el.y;
-                zone.innerText = el.hint || "؟";
+                zone.innerText = "؟";
                 zone.dataset.answer = el.text;
                 zone.addEventListener('dragover', (e) => e.preventDefault());
                 zone.addEventListener('drop', handleDrop);
