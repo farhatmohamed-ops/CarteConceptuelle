@@ -1,0 +1,284 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>الخبر </title>
+        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
+
+        :root {
+            --bg-site: #E3F2FD;
+            --main-color: #1976D2;
+            --accent-color: #FF9800;
+            --success-color: #4CAF50;
+            --home-color: #FF6B6B; 
+            --text-dark: #2C3E50;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-site);
+            background-image: radial-gradient(rgba(0,0,0,0.05) 2px, transparent 2px);
+            background-size: 30px 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            margin: 0;
+            color: var(--text-dark);
+            position: relative;
+        }
+
+
+        .home-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px; 
+            text-decoration: none;
+            background-color: var(--home-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 15px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 0 #D32F2F;
+            transition: all 0.2s;
+            z-index: 1000;
+        }
+
+        .home-btn:hover {
+            transform: translateY(2px);
+            box-shadow: 0 3px 0 #D32F2F;
+        }
+
+        .answers-pool {
+            background: white;
+            padding: 20px;
+            border-radius: 25px;
+            box-shadow: 0 8px 0 #CFD8DC;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 90%;
+            margin-top: 60px; /* Espace pour le bouton home */
+            margin-bottom: 30px;
+            border: 3px solid var(--main-color);
+        }
+
+        .drag-item {
+            background: var(--accent-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 15px;
+            cursor: grab;
+            font-weight: 800;
+            box-shadow: 0 4px 0 #E65100;
+            user-select: none;
+        }
+
+        .map-area {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            height: 500px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 40px;
+            border: 4px dashed var(--main-color);
+        }
+
+        .node {
+            position: absolute;
+            padding: 15px 25px;
+            border-radius: 20px;
+            font-weight: 700;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translate(-50%, -50%);
+            white-space: pre-wrap;     
+            max-width: 220px;          
+            line-height: 1.5;          
+            font-size: 0.9rem;         
+        }
+
+        .node-main {
+            background: var(--main-color);
+            color: white;
+            font-size: 1.5rem;
+            z-index: 10;
+            box-shadow: 0 8px 0 #0D47A1;
+            top: 50%; left: 50%;
+        }
+
+        .drop-zone {
+            background: #F5F5F5;
+            border: 3px dashed #BDBDBD;
+            min-width: 140px;
+            min-height: 60px;
+        }
+
+        .drop-zone.correct {
+            background: var(--success-color);
+            border: 3px solid white;
+            color: white;
+            box-shadow: 0 5px 0 #2E7D32;
+        }
+
+        svg {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+        }
+
+        #victory {
+            display: none;
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 30px;
+            box-shadow: 0 0 50px rgba(0,0,0,0.3);
+            text-align: center;
+            z-index: 10000;
+            border: 5px solid var(--success-color);
+        }
+
+        @media (max-width: 768px) {
+            .home-btn { position: relative; top: 0; left: 0; margin-bottom: 10px; }
+            .map-area { height: 400px; }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="home-btn">
+        <span>🏠</span>
+        الرئيسية
+    </a>
+
+    <h1 id="game-title">أكمل الخريطة المفاهيمية</h1>
+    
+    <div class="answers-pool" id="answers-pool"></div>
+
+    <div class="map-area" id="map-area">
+        <svg id="lines-svg"></svg>
+        <div class="node node-main" id="main-node">الموضوع</div>
+    </div>
+
+    <div id="victory">
+        <h2>🎉 ممتاز! 🎉</h2>
+        <p>لقد نجحت في إكمال الخريطة بذكاء.</p>
+        <div style="display: flex; gap: 10px; justify-content: center;">
+            <button onclick="location.reload()" style="padding:10px 20px; cursor:pointer; background: var(--accent-color); color:white; border:none; border-radius:10px; font-weight:bold;">العب مرة أخرى</button>
+            <a href="index.html" style="padding:10px 20px; text-decoration:none; background: var(--main-color); color:white; border-radius:10px; font-weight:bold;">الخروج</a>
+        </div>
+    </div>
+
+    <script>
+        const config = {
+            title: "خريطة  الخبر",
+            mainTopic: "الخبر",
+            elements: [
+        // Niveau 1 (Haut)
+        { text: "بائع متجول", hint: "مركب إضافي\nهذا ...", x: "25%", y: "40%" }, 
+        { text: "في الخزانة", hint: "مركب بالجر\nكراسات القسم ...", x: "75%", y: "40%" },
+        
+        // Niveau 2 (Milieu)
+        { text: "كتب وموسوعات", hint: "مركب عطفي\nهذه ...", x: "25%", y: "60%" },
+        { text: "يقدمون عرضا مسرحيا", hint: "مركب إسنادي فعلي\nالتلاميذ", x: "75%", y: "60%" },
+        
+        // Niveau 3 (Bas)
+        { text: "درة تاريخية", hint: "مركب نعتي\nقصر الزهراء", x: "25%", y: "80%" },
+        { text: "ثرية", hint: "مفردة\nمكتبة المعهد ...", x: "75%", y: "80%" },
+    ]
+        };
+
+        const pool = document.getElementById('answers-pool');
+        const map = document.getElementById('map-area');
+        const svg = document.getElementById('lines-svg');
+        const mainNode = document.getElementById('main-node');
+        let solved = 0;
+
+        function initGame() {
+            document.getElementById('game-title').innerText = config.title;
+            mainNode.innerText = config.mainTopic;
+            const shuffled = [...config.elements].sort(() => Math.random() - 0.5);
+
+            shuffled.forEach((el, index) => {
+                const dragEl = document.createElement('div');
+                dragEl.className = 'drag-item';
+                dragEl.innerText = el.text;
+                dragEl.draggable = true;
+                dragEl.id = `drag-${index}`;
+                dragEl.addEventListener('dragstart', (e) => e.dataTransfer.setData('text', el.text + '|' + dragEl.id));
+                pool.appendChild(dragEl);
+
+                const zone = document.createElement('div');
+                zone.className = 'node drop-zone';
+                zone.style.left = el.x;
+                zone.style.top = el.y;
+                zone.innerText = el.hint || "؟";
+                zone.dataset.answer = el.text;
+                zone.dataset.hint = el.hint;
+                zone.addEventListener('dragover', (e) => e.preventDefault());
+                zone.addEventListener('drop', handleDrop);
+                map.appendChild(zone);
+
+                drawLine(el.x, el.y);
+            });
+        }
+
+        function drawLine(x, y) {
+            const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            line.setAttribute("x1", "50%"); line.setAttribute("y1", "50%");
+            line.setAttribute("x2", x); line.setAttribute("y2", y);
+            line.setAttribute("stroke", "#BDBDBD"); line.setAttribute("stroke-width", "3");
+            svg.appendChild(line);
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            const data = e.dataTransfer.getData('text').split('|');
+            const val = data[0]; // La réponse (ex: "منصوب")
+            const id = data[1];
+
+            const zone = e.target;
+            const targetAnswer = zone.dataset.answer;
+            const originalHint = zone.dataset.hint; // On récupère le texte avec "..."
+
+            if (val === targetAnswer && !zone.classList.contains('correct')) {
+                // --- LOGIQUE DE FUSION ---
+                // On remplace les points de suspension par la réponse en gras ou simple
+                if (originalHint.includes("...")) {
+                    zone.innerText = originalHint.replace("...", val);
+                } else {
+                    // Si pas de "...", on l'ajoute juste à la suite
+                    zone.innerText = originalHint + " " + val;
+                }
+
+                zone.classList.add('correct');
+                document.getElementById(id).style.visibility = 'hidden';
+                solved++;
+        
+                if (solved === config.elements.length) {
+                document.getElementById('victory').style.display = 'block';
+                }
+            } else {
+                zone.style.borderColor = 'red';
+                setTimeout(() => zone.style.borderColor = '#BDBDBD', 500);
+                }
+        }
+
+        initGame();
+    </script>
+</body>
+</html>
