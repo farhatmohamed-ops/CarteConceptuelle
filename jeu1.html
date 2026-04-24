@@ -224,6 +224,7 @@
                 zone.style.top = el.y;
                 zone.innerText = el.hint || "؟";
                 zone.dataset.answer = el.text;
+                zone.dataset.hint = el.hint;
                 zone.addEventListener('dragover', (e) => e.preventDefault());
                 zone.addEventListener('drop', handleDrop);
                 map.appendChild(zone);
@@ -243,21 +244,34 @@
         function handleDrop(e) {
             e.preventDefault();
             const data = e.dataTransfer.getData('text').split('|');
-            const val = data[0];
+            const val = data[0]; // La réponse (ex: "منصوب")
             const id = data[1];
 
-            if (e.target.dataset.answer === val && !e.target.classList.contains('correct')) {
-                e.target.innerText = val;
-                e.target.classList.add('correct');
+            const zone = e.target;
+            const targetAnswer = zone.dataset.answer;
+            const originalHint = zone.dataset.hint; // On récupère le texte avec "..."
+
+            if (val === targetAnswer && !zone.classList.contains('correct')) {
+                // --- LOGIQUE DE FUSION ---
+                // On remplace les points de suspension par la réponse en gras ou simple
+                if (originalHint.includes("...")) {
+                    zone.innerText = originalHint.replace("...", val);
+                } else {
+                    // Si pas de "...", on l'ajoute juste à la suite
+                    zone.innerText = originalHint + " " + val;
+                }
+
+                zone.classList.add('correct');
                 document.getElementById(id).style.visibility = 'hidden';
                 solved++;
+        
                 if (solved === config.elements.length) {
-                    document.getElementById('victory').style.display = 'block';
+                document.getElementById('victory').style.display = 'block';
                 }
             } else {
-                e.target.style.borderColor = 'red';
-                setTimeout(() => e.target.style.borderColor = '#BDBDBD', 500);
-            }
+                zone.style.borderColor = 'red';
+                setTimeout(() => zone.style.borderColor = '#BDBDBD', 500);
+                }
         }
 
         initGame();
