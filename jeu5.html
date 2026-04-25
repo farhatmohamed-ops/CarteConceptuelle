@@ -18,19 +18,22 @@
         body {
             font-family: 'Cairo', sans-serif;
             background-color: var(--bg-site);
+            background-image: radial-gradient(rgba(0,0,0,0.05) 2px, transparent 2px);
+            background-size: 30px 30px;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px;
             margin: 0;
-            min-height: 100vh;
+            color: var(--text-dark);
+            position: relative;
         }
 
         /* --- زر الصفحة الرئيسية --- */
-        .home-btn {
+                .home-btn {
             position: absolute;
             top: 20px;
-            right: 20px; 
+            left: 20px; 
             text-decoration: none;
             background-color: var(--home-color);
             color: white;
@@ -41,7 +44,13 @@
             align-items: center;
             gap: 10px;
             box-shadow: 0 5px 0 #D32F2F;
+            transition: all 0.2s;
             z-index: 1000;
+        }
+
+        .home-btn:hover {
+            transform: translateY(2px);
+            box-shadow: 0 3px 0 #D32F2F;
         }
 
         /* --- حاوية الإجابات (الأزرار البرتقالية) --- */
@@ -56,7 +65,7 @@
             justify-content: center;
             width: 90%;
             max-width: 1100px;
-            min-height: 100px;
+            /* min-height: 100px; */
             margin-top: 60px;
             margin-bottom: 30px;
             border: 3px solid var(--main-color);
@@ -136,8 +145,8 @@
         .drop-zone.correct {
             background-color: var(--success-color) !important;
             color: white !important;
+            border: 2px solid #2E7D32 !important;
             border-style: solid;
-            border-color: #2E7D32;
         }
 
         /* --- الخطوط --- */
@@ -161,6 +170,27 @@
             text-align: center;
             z-index: 3000;
             border: 6px solid var(--success-color);
+        }
+
+        .node-example {
+            background: #eeeeee;
+            border: 2px dashed #ccc;
+            border-radius: 6px;
+            padding: 5px;
+            font-size: 0.85rem;
+            color: #555;
+            min-height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .node-title {
+            font-weight: 800;
+            margin-bottom: 8px;
+            min-height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     </style>
 </head>
@@ -186,17 +216,43 @@
 
         <div class="level">
             <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-                <div class="node" id="m1">مركب إضافي <div class="drop-zone" data-ans="داء الكلب مرض معد">...</div></div>
-                <div class="node" id="m2">مركب عطفي <div class="drop-zone" data-ans="التوراة والإنجيل كتب سماوية">...</div></div>
-                <div class="node" id="m3">مركب نعتي <div class="drop-zone" data-ans="الماء البارد منعش">...</div></div>
-                <div class="node" id="m4">مركب بدلي <div class="drop-zone" data-ans="الفتاة رميساء لطيفة">...</div></div>
+                <div class="node" id="m1">
+                    <div class="node-title">مركب إضافي</div>
+                    <div class="node-example drop-zone" data-ans="داء الكلب مرض معد">...</div>
+                </div>
+                <div class="node" id="m2">
+                    <div class="node-title drop-zone" data-ans="مركب عطفي">...</div>
+                    <div class="node-example">التوراة والإنجيل كتب سماوية</div>
+                </div>
+                <div class="node" id="m3">
+                    <div class="node-title">مركب نعتي</div>
+                    <div class="node-example drop-zone" data-ans="الماء البارد منعش">...</div>
+                </div>
+                <div class="node" id="m4">
+                    <div class="node-title drop-zone" data-ans="مركب بدلي">...</div>
+                    <div class="node-example">الفتاة رميساء لطيفة</div>
+                </div>
             </div>
 
-            <div style="width: 40px;"></div> <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-                <div class="node" id="s1">اسم جنس <div class="drop-zone" data-ans="الصبر مفتاح الفرج">...</div></div>
-                <div class="node" id="s2">اسم علم <div class="drop-zone" data-ans="ربيع ولد حنون">...</div></div>
-                <div class="node" id="s3">اسم إشارة <div class="drop-zone" data-ans="هذا تمثال الحرية">...</div></div>
-                <div class="node" id="s4">ضمير منفصل <div class="drop-zone" data-ans="هو صاحب المبادرة">...</div></div>
+            <div style="width: 40px;"></div> 
+
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                <div class="node" id="s1">
+                    <div class="node-title">اسم جنس</div>
+                    <div class="node-example drop-zone" data-ans="الصبر مفتاح الفرج">...</div>
+                </div>
+                <div class="node" id="s2">
+                    <div class="node-title drop-zone" data-ans="اسم علم">...</div>
+                    <div class="node-example">ربيع ولد حنون</div>
+                </div>
+                <div class="node" id="s3">
+                    <div class="node-title">اسم إشارة</div>
+                    <div class="node-example drop-zone" data-ans="هذا تمثال الحرية">...</div>
+                </div>
+                <div class="node" id="s4">
+                    <div class="node-title drop-zone" data-ans="ضمير منفصل">...</div>
+                    <div class="node-example">هو صاحب المبادرة</div>
+                </div>
             </div>
         </div>
     </div>
@@ -209,10 +265,10 @@
 
     <script>
         const rawAnswers = [
-            "داء الكلب مرض معد", "التوراة والإنجيل كتب سماوية", 
-            "الماء البارد منعش", "الفتاة رميساء لطيفة",
-            "الصبر مفتاح الفرج", "ربيع ولد حنون", 
-            "هذا تمثال الحرية", "هو صاحب المبادرة"
+            "داء الكلب مرض معد", "مركب عطفي", 
+            "الماء البارد منعش", "مركب بدلي",
+            "الصبر مفتاح الفرج", "اسم علم", 
+            "هذا تمثال الحرية", "ضمير منفصل"
         ];
 
         const pool = document.getElementById('pool');
