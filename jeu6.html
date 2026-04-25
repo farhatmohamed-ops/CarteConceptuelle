@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>خريطة المبتدأ - التصميم النهائي</title>
+    <title>خريطة المفعول لأجله - التصميم النهائي</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -30,7 +30,7 @@
         }
 
         /* --- زر الصفحة الرئيسية --- */
-                .home-btn {
+        .home-btn {
             position: absolute;
             top: 20px;
             left: 20px; 
@@ -65,7 +65,6 @@
             justify-content: center;
             width: 90%;
             max-width: 1100px;
-            /* min-height: 100px; */
             margin-top: 60px;
             margin-bottom: 30px;
             border: 3px solid var(--main-color);
@@ -112,19 +111,23 @@
             text-align: center;
             font-weight: 700;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .node-root {
             background: var(--main-color);
             color: white;
             font-size: 1.2rem;
-            width: 200px;
+            width: 220px;
         }
 
         .node-sub-main {
             background: #f8fbff;
             font-size: 1.1rem;
             border-width: 3px;
+            width: 180px;
         }
 
         /* --- منطقة الإفلات --- */
@@ -140,6 +143,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            font-weight: bold;
         }
 
         .drop-zone.correct {
@@ -164,26 +168,28 @@
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             background: white;
-            padding: 40px;
+            padding: 30px;
             border-radius: 30px;
-            box-shadow: 0 0 100px rgba(0,0,0,0.5);
+            box-shadow: 0 0 50px rgba(0,0,0,0.3);
             text-align: center;
-            z-index: 3000;
-            border: 6px solid var(--success-color);
+            z-index: 10000;
+            border: 5px solid var(--success-color);
         }
 
         .node-example {
             background: #eeeeee;
             border: 2px dashed #ccc;
             border-radius: 6px;
-            padding: 5px;
+            padding: 10px;
             font-size: 0.85rem;
             color: #555;
             min-height: 30px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
         }
+        
         .node-title {
             font-weight: 800;
             margin-bottom: 8px;
@@ -198,7 +204,7 @@
 
     <a href="index.html" class="home-btn">🏠 الرئيسية</a>
 
-    <h2 style="color: var(--main-color); margin-bottom: 5px;">خريطة المبتدأ</h2>
+    <h2 style="color: var(--main-color); margin-bottom: 5px;">خريطة المفعول لأجله</h2>
     
     <div class="answers-pool" id="pool"></div>
 
@@ -206,69 +212,67 @@
         <svg id="svg-canvas"></svg>
 
         <div class="level">
-            <div class="node node-root" id="root">مبتدأ</div>
+            <div class="node node-root" id="root">المفعول لأجله</div>
         </div>
 
-        <div class="level" style="gap: 300px;">
-            <div class="node node-sub-main" id="cat1">مركب</div>
-            <div class="node node-sub-main" id="cat2">مفردة</div>
-        </div>
-
-        <div class="level">
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-                <div class="node" id="m1">
-                    <div class="node-title">مركب إضافي</div>
-                    <div class="node-example drop-zone" data-ans="داء الكلب مرض معد">...</div>
-                </div>
-                <div class="node" id="m2">
-                    <div class="node-title drop-zone" data-ans="مركب عطفي">...</div>
-                    <div class="node-example">التوراة والإنجيل كتب سماوية</div>
-                </div>
-                <div class="node" id="m3">
-                    <div class="node-title">مركب نعتي</div>
-                    <div class="node-example drop-zone" data-ans="الماء البارد منعش">...</div>
-                </div>
-                <div class="node" id="m4">
-                    <div class="node-title drop-zone" data-ans="مركب بدلي">...</div>
-                    <div class="node-example">الفتاة رميساء لطيفة</div>
+        <div class="level" style="gap: 30px; align-items: flex-start; margin-top: 30px;">
+            
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 40px;">
+                <div class="node node-sub-main" id="cat3">تعريفه</div>
+                <div class="node" id="n4">
+                    <div class="node-example">
+                        يعتبر متمم من متممات الجملة الفعلية وهو المكون الذي يأتي ليبين سبب وقوع الفعل ويسأل عنه في الجملة بأداة الاستفهام
+                        <div class="drop-zone" style="width: 80%;" data-ans="لماذا؟">...</div>
+                    </div>
                 </div>
             </div>
 
-            <div style="width: 40px;"></div> 
-
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-                <div class="node" id="s1">
-                    <div class="node-title">اسم جنس</div>
-                    <div class="node-example drop-zone" data-ans="الصبر مفتاح الفرج">...</div>
-                </div>
-                <div class="node" id="s2">
-                    <div class="node-title drop-zone" data-ans="اسم علم">...</div>
-                    <div class="node-example">ربيع ولد حنون</div>
-                </div>
-                <div class="node" id="s3">
-                    <div class="node-title">اسم إشارة</div>
-                    <div class="node-example drop-zone" data-ans="هذا تمثال الحرية">...</div>
-                </div>
-                <div class="node" id="s4">
-                    <div class="node-title drop-zone" data-ans="ضمير منفصل">...</div>
-                    <div class="node-example">هو صاحب المبادرة</div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 40px; width: 360px;">
+                <div class="node node-sub-main" id="cat2">أشكاله النّحويّة: يرد المفعول لأجله مركب بالجر أو مركب شبه إسنادي</div>
+                <div style="display: flex; gap: 15px; width: 100%; justify-content: center;">
+                    <div class="node" id="n2" style="width: 160px;">
+                        <div class="node-title">مركّب بالجرّ (غالبا يجر بلام التعليل)</div>
+                        <div class="node-example">
+                               يعمل الشاب ليل نهار
+                            <div class="drop-zone" style="width: 90%;" data-ans="ليحقق أهدافه">...</div>
+                        </div>
+                    </div>
+                    <div class="node" id="n3" style="width: 160px;">
+                        <div class="node-title">مركّب شبه إسنادي</div>
+                        <div class="node-example">
+                            شربت المريضة الدّواء
+                            <div class="drop-zone" style="width: 90%;" data-ans="طلبا للشفاء">...</div>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 40px;">
+                <div class="node node-sub-main" id="cat1">إعرابه</div>
+                <div class="node" id="n1">
+                    <div class="node-example">
+                        يرد المفعول لأجله
+                        <div class="drop-zone" style="width: 80%;" data-ans="منصوبا">...</div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
     <div id="victory">
-        <h1 style="font-size: 3rem;">🎉 ممتاز! 🎉</h1>
-        <p>لقد نجحت في إكمال الخريطة بنجاح</p>
-        <button onclick="location.reload()" style="padding:15px 30px; cursor:pointer; background:var(--accent-color); color:white; border:none; border-radius:15px; font-weight:bold; font-size:1.2rem;">إلعب مرة أخرى</button>
+        <h2>🎉 ممتاز! 🎉</h2>
+        <p>لقد نجحت في إكمال الخريطة بذكاء.</p>
+        <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+            <button onclick="location.reload()" style="padding:10px 20px; cursor:pointer; background: var(--accent-color); color:white; border:none; border-radius:10px; font-weight:bold; font-family:'Cairo'">العب مرة أخرى</button>
+            <a href="index.html" style="padding:10px 20px; text-decoration:none; background: var(--main-color); color:white; border-radius:10px; font-weight:bold; font-family:'Cairo'">الخروج</a>
+        </div>
     </div>
 
     <script>
+        // الإجابات الخاصة بالمفعول لأجله
         const rawAnswers = [
-            "داء الكلب مرض معد", "مركب عطفي", 
-            "الماء البارد منعش", "مركب بدلي",
-            "الصبر مفتاح الفرج", "اسم علم", 
-            "هذا تمثال الحرية", "ضمير منفصل"
+            "منصوبا", "طلبا للشفاء", "ليحقق أهدافه", "لماذا؟"
         ];
 
         const pool = document.getElementById('pool');
@@ -287,7 +291,7 @@
             pool.appendChild(btn);
         });
 
-        // منطق الإسقاط
+        // منطق الإسقاط (المعدّل للحفاظ على النص)
         document.querySelectorAll('.drop-zone').forEach(zone => {
             zone.addEventListener('dragover', e => e.preventDefault());
             zone.addEventListener('drop', e => {
@@ -295,7 +299,7 @@
                 const [val, btnId] = e.dataTransfer.getData('text').split('|');
                 
                 if (val.trim() === zone.dataset.ans.trim()) {
-                    zone.innerText = val;
+                    zone.innerText = val; // سيستبدل فقط النقاط المتبقية داخل صندوق الـ drop-zone الصغير
                     zone.classList.add('correct');
                     document.getElementById(btnId).style.display = 'none';
                     solvedCount++;
@@ -309,7 +313,7 @@
             });
         });
 
-        // رسم الخطوط
+        // رسم الخطوط المتصلة
         function drawLines() {
             const svg = document.getElementById('svg-canvas');
             svg.innerHTML = '';
@@ -320,24 +324,29 @@
                 const el2 = document.getElementById(id2).getBoundingClientRect();
                 
                 const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                // يبدأ الخط من منتصف أسفل العنصر الأول
                 line.setAttribute("x1", (el1.left + el1.width/2) - treeRect.left);
                 line.setAttribute("y1", (el1.bottom) - treeRect.top);
+                // ينتهي الخط في منتصف أعلى العنصر الثاني
                 line.setAttribute("x2", (el2.left + el2.width/2) - treeRect.left);
                 line.setAttribute("y2", (el2.top) - treeRect.top);
-                line.setAttribute("stroke", "#1976D2");
+                line.setAttribute("stroke", "var(--main-color)");
                 line.setAttribute("stroke-width", "2.5");
                 svg.appendChild(line);
             }
 
-            // ربط الجذور
-            createLine('root', 'cat1');
-            createLine('root', 'cat2');
+            // ربط الجذر بالعناوين الرئيسية الثلاثة
+            createLine('root', 'cat3'); // تعريفه
+            createLine('root', 'cat2'); // أشكاله
+            createLine('root', 'cat1'); // إعرابه
 
-            // ربط فروع المركب
-            ['m1', 'm2', 'm3', 'm4'].forEach(id => createLine('cat1', id));
+            // ربط العناوين الرئيسية بالأمثلة الخاصة بها
+            createLine('cat3', 'n4'); // تعريفه -> المثال
             
-            // ربط فروع المفردة
-            ['s1', 's2', 's3', 's4'].forEach(id => createLine('cat2', id));
+            createLine('cat2', 'n2'); // أشكاله -> مركّب بالجرّ
+            createLine('cat2', 'n3'); // أشكاله -> مركّب شبه إسنادي
+
+            createLine('cat1', 'n1'); // إعرابه -> المثال
         }
 
         window.addEventListener('load', drawLines);
