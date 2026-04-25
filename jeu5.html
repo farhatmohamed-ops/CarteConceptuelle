@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خريطة المبتدأ - التصميم النهائي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-site: #f0f7ff;
+            --main-color: #1976D2; /* اللون الأزرق للحدود */
+            --accent-color: #FF9800; /* لون الأزرار البرتقالي */
+            --success-color: #4CAF50;
+            --home-color: #FF6B6B; 
+            --text-dark: #2C3E50;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-site);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        /* --- زر الصفحة الرئيسية --- */
+        .home-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px; 
+            text-decoration: none;
+            background-color: var(--home-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 15px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 0 #D32F2F;
+            z-index: 1000;
+        }
+
+        /* --- حاوية الإجابات (الأزرار البرتقالية) --- */
+        .answers-pool {
+            background: white;
+            padding: 20px;
+            border-radius: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 90%;
+            max-width: 1100px;
+            min-height: 100px;
+            margin-top: 60px;
+            margin-bottom: 30px;
+            border: 3px solid var(--main-color);
+        }
+
+        .drag-item {
+            background: var(--accent-color);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 10px;
+            cursor: grab;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 0 #E65100;
+            user-select: none;
+        }
+
+        /* --- هيكل الخريطة --- */
+        .tree-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            width: 100%;
+            position: relative;
+            padding-bottom: 50px;
+        }
+
+        .level {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            width: 100%;
+            z-index: 2;
+        }
+
+        /* --- تصميم الصناديق (أبيض بحدود زرقاء) --- */
+        .node {
+            background: white;
+            border: 2.5px solid var(--main-color);
+            border-radius: 12px;
+            padding: 10px;
+            width: 160px;
+            text-align: center;
+            font-weight: 700;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .node-root {
+            background: var(--main-color);
+            color: white;
+            font-size: 1.2rem;
+            width: 200px;
+        }
+
+        .node-sub-main {
+            background: #f8fbff;
+            font-size: 1.1rem;
+            border-width: 3px;
+        }
+
+        /* --- منطقة الإفلات --- */
+        .drop-zone {
+            background: #eeeeee;
+            border: 2px dashed #ccc;
+            border-radius: 6px;
+            padding: 5px;
+            margin-top: 8px;
+            min-height: 30px;
+            font-size: 0.85rem;
+            color: #777;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .drop-zone.correct {
+            background-color: var(--success-color) !important;
+            color: white !important;
+            border-style: solid;
+            border-color: #2E7D32;
+        }
+
+        /* --- الخطوط --- */
+        #svg-canvas {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        #victory {
+            display: none;
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 0 100px rgba(0,0,0,0.5);
+            text-align: center;
+            z-index: 3000;
+            border: 6px solid var(--success-color);
+        }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="home-btn">🏠 الرئيسية</a>
+
+    <h2 style="color: var(--main-color); margin-bottom: 5px;">خريطة المبتدأ المفاهيمية</h2>
+    
+    <div class="answers-pool" id="pool"></div>
+
+    <div class="tree-container" id="tree">
+        <svg id="svg-canvas"></svg>
+
+        <div class="level">
+            <div class="node node-root" id="root">مبتدأ</div>
+        </div>
+
+        <div class="level" style="gap: 300px;">
+            <div class="node node-sub-main" id="cat1">مركب</div>
+            <div class="node node-sub-main" id="cat2">مفردة</div>
+        </div>
+
+        <div class="level">
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                <div class="node" id="m1">مركب إضافي <div class="drop-zone" data-ans="داء الكلب مرض معد">...</div></div>
+                <div class="node" id="m2">مركب عطفي <div class="drop-zone" data-ans="التوراة والإنجيل كتب سماوية">...</div></div>
+                <div class="node" id="m3">مركب نعتي <div class="drop-zone" data-ans="الماء البارد منعش">...</div></div>
+                <div class="node" id="m4">مركب بدلي <div class="drop-zone" data-ans="الفتاة رميساء لطيفة">...</div></div>
+            </div>
+
+            <div style="width: 40px;"></div> <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                <div class="node" id="s1">اسم جنس <div class="drop-zone" data-ans="الصبر مفتاح الفرج">...</div></div>
+                <div class="node" id="s2">اسم علم <div class="drop-zone" data-ans="ربيع ولد حنون">...</div></div>
+                <div class="node" id="s3">اسم إشارة <div class="drop-zone" data-ans="هذا تمثال الحرية">...</div></div>
+                <div class="node" id="s4">ضمير منفصل <div class="drop-zone" data-ans="هو صاحب المبادرة">...</div></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="victory">
+        <h1 style="font-size: 3rem;">🎉 ممتاز! 🎉</h1>
+        <p>لقد نجحت في إكمال الخريطة بنجاح</p>
+        <button onclick="location.reload()" style="padding:15px 30px; cursor:pointer; background:var(--accent-color); color:white; border:none; border-radius:15px; font-weight:bold; font-size:1.2rem;">إلعب مرة أخرى</button>
+    </div>
+
+    <script>
+        const rawAnswers = [
+            "داء الكلب مرض معد", "التوراة والإنجيل كتب سماوية", 
+            "الماء البارد منعش", "الفتاة رميساء لطيفة",
+            "الصبر مفتاح الفرج", "ربيع ولد حنون", 
+            "هذا تمثال الحرية", "هو صاحب المبادرة"
+        ];
+
+        const pool = document.getElementById('pool');
+        let solvedCount = 0;
+
+        // خلط وتوليد الأزرار
+        [...rawAnswers].sort(() => Math.random() - 0.5).forEach((text, i) => {
+            const btn = document.createElement('div');
+            btn.className = 'drag-item';
+            btn.innerText = text;
+            btn.draggable = true;
+            btn.id = 'ans-' + i;
+            btn.addEventListener('dragstart', e => {
+                e.dataTransfer.setData('text', text + '|' + btn.id);
+            });
+            pool.appendChild(btn);
+        });
+
+        // منطق الإسقاط
+        document.querySelectorAll('.drop-zone').forEach(zone => {
+            zone.addEventListener('dragover', e => e.preventDefault());
+            zone.addEventListener('drop', e => {
+                e.preventDefault();
+                const [val, btnId] = e.dataTransfer.getData('text').split('|');
+                
+                if (val.trim() === zone.dataset.ans.trim()) {
+                    zone.innerText = val;
+                    zone.classList.add('correct');
+                    document.getElementById(btnId).style.display = 'none';
+                    solvedCount++;
+                    if (solvedCount === rawAnswers.length) {
+                        setTimeout(() => { document.getElementById('victory').style.display = 'block'; }, 500);
+                    }
+                } else {
+                    zone.style.borderColor = 'red';
+                    setTimeout(() => zone.style.borderColor = '#ccc', 500);
+                }
+            });
+        });
+
+        // رسم الخطوط
+        function drawLines() {
+            const svg = document.getElementById('svg-canvas');
+            svg.innerHTML = '';
+            const treeRect = document.getElementById('tree').getBoundingClientRect();
+
+            function createLine(id1, id2) {
+                const el1 = document.getElementById(id1).getBoundingClientRect();
+                const el2 = document.getElementById(id2).getBoundingClientRect();
+                
+                const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                line.setAttribute("x1", (el1.left + el1.width/2) - treeRect.left);
+                line.setAttribute("y1", (el1.bottom) - treeRect.top);
+                line.setAttribute("x2", (el2.left + el2.width/2) - treeRect.left);
+                line.setAttribute("y2", (el2.top) - treeRect.top);
+                line.setAttribute("stroke", "#1976D2");
+                line.setAttribute("stroke-width", "2.5");
+                svg.appendChild(line);
+            }
+
+            // ربط الجذور
+            createLine('root', 'cat1');
+            createLine('root', 'cat2');
+
+            // ربط فروع المركب
+            ['m1', 'm2', 'm3', 'm4'].forEach(id => createLine('cat1', id));
+            
+            // ربط فروع المفردة
+            ['s1', 's2', 's3', 's4'].forEach(id => createLine('cat2', id));
+        }
+
+        window.addEventListener('load', drawLines);
+        window.addEventListener('resize', drawLines);
+    </script>
+</body>
+</html>

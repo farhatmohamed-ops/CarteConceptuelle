@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>المركب الإضافي </title>
-        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المركب الإضافي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
 
@@ -32,7 +31,6 @@
             position: relative;
         }
 
-
         .home-btn {
             position: absolute;
             top: 20px;
@@ -58,17 +56,24 @@
 
         .answers-pool {
             background: white;
-            padding: 20px;
+            padding: 25px;
             border-radius: 25px;
             box-shadow: 0 8px 0 #CFD8DC;
             display: flex;
             gap: 15px;
             flex-wrap: wrap;
             justify-content: center;
-            max-width: 90%;
-            margin-top: 60px; /* Espace pour le bouton home */
+            align-items: center;
+            
+            /* تثبيت الحجم هنا */
+            width: 85%;
+            max-width: 900px;
+            height: 140px; /* حدد الارتفاع الذي يناسب حجم عناصرك عند البداية */
+            
+            margin-top: 60px; 
             margin-bottom: 30px;
             border: 3px solid var(--main-color);
+            box-sizing: border-box; 
         }
 
         .drag-item {
@@ -85,11 +90,12 @@
         .map-area {
             position: relative;
             width: 100%;
-            max-width: 900px;
-            height: 500px;
+            max-width: 1000px;
+            height: 600px;
             background: rgba(255, 255, 255, 0.4);
             border-radius: 40px;
             border: 4px dashed var(--main-color);
+            margin-bottom: 50px;
         }
 
         .node {
@@ -98,14 +104,15 @@
             border-radius: 20px;
             font-weight: 700;
             text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             transform: translate(-50%, -50%);
-            white-space: pre-wrap;     
-            max-width: 220px;          
-            line-height: 1.5;          
-            font-size: 0.9rem;         
+            white-space: normal;     
+            min-width: 180px;
+            max-width: 320px;          
+            line-height: 1.8;          
+            font-size: 1rem;
+            background: white;
+            border: 3px solid var(--main-color);
+            box-shadow: 0 4px 0 #CFD8DC;
         }
 
         .node-main {
@@ -115,20 +122,42 @@
             z-index: 10;
             box-shadow: 0 8px 0 #0D47A1;
             top: 50%; left: 50%;
+            border: none;
         }
 
-        .drop-zone {
+        /* --- تثبيت حجم مناطق الإفلات --- */
+        .inline-drop {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 110px; /* عرض ثابت كما طلبت */
+            height: 38px; /* ارتفاع ثابت */
             background: #F5F5F5;
-            border: 3px dashed #BDBDBD;
-            min-width: 140px;
-            min-height: 60px;
+            border: 2px dashed #BDBDBD;
+            border-radius: 8px;
+            vertical-align: middle;
+            margin: 2px 5px;
+            transition: all 0.3s;
+            box-sizing: border-box;
+            overflow: hidden;
+            white-space: nowrap;
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: transparent; /* إخفاء النص الأولي */
         }
 
-        .drop-zone.correct {
-            background: var(--success-color);
-            border: 3px solid white;
-            color: white;
-            box-shadow: 0 5px 0 #2E7D32;
+        /* --- ضمان تطبيق اللون الأخضر --- */
+        .inline-drop.correct {
+            background: var(--success-color) !important;
+            border: 2px solid var(--success-color) !important;
+            color: white !important;
+            box-shadow: 0 3px 0 #2E7D32 !important;
+        }
+
+        .static-node {
+            background-color: #E0E0E0 !important;
+            border: 2px solid #BDBDBD !important;
+            cursor: default !important;
         }
 
         svg {
@@ -136,6 +165,7 @@
             top: 0; left: 0;
             width: 100%; height: 100%;
             pointer-events: none;
+            z-index: 0;
         }
 
         #victory {
@@ -154,13 +184,9 @@
 
         @media (max-width: 768px) {
             .home-btn { position: relative; top: 0; left: 0; margin-bottom: 10px; }
-            .map-area { height: 400px; }
-        }
-
-        .static-node {
-            background-color: #E0E0E0 !important; /* Gris clair */
-            border: 2px solid #BDBDBD !important;
-            cursor: default !important; /* Pas de curseur de drag */
+            .map-area { height: auto; min-height: 800px; padding: 20px 0; }
+            .node { position: relative; transform: none; left: auto !important; top: auto !important; margin: 20px auto; }
+            svg { display: none; }
         }
     </style>
 </head>
@@ -177,125 +203,129 @@
 
     <div class="map-area" id="map-area">
         <svg id="lines-svg"></svg>
-        <div class="node node-main" id="main-node">الموضوع</div>
+        <div class="node node-main" id="main-node">مركب<br>إضافي</div>
     </div>
 
     <div id="victory">
         <h2>🎉 ممتاز! 🎉</h2>
         <p>لقد نجحت في إكمال الخريطة بذكاء.</p>
-        <div style="display: flex; gap: 10px; justify-content: center;">
-            <button onclick="location.reload()" style="padding:10px 20px; cursor:pointer; background: var(--accent-color); color:white; border:none; border-radius:10px; font-weight:bold;">العب مرة أخرى</button>
-            <a href="index.html" style="padding:10px 20px; text-decoration:none; background: var(--main-color); color:white; border-radius:10px; font-weight:bold;">الخروج</a>
+        <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+            <button onclick="location.reload()" style="padding:10px 20px; cursor:pointer; background: var(--accent-color); color:white; border:none; border-radius:10px; font-weight:bold; font-family:'Cairo'">العب مرة أخرى</button>
+            <a href="index.html" style="padding:10px 20px; text-decoration:none; background: var(--main-color); color:white; border-radius:10px; font-weight:bold; font-family:'Cairo'">الخروج</a>
         </div>
     </div>
 
     <script>
         const config = {
-            title: "خريطة  المركب الإضافي",
-            mainTopic: "المركب الإضافي",
+            title: "خريطة المركب الإضافي",
             elements: [
-                { type: "standard", text: "مجرورا", hint:"يكون المضاف إليه", x: "25%", y: "20%" }, 
-// Déjà rempli, pas de drag & drop ici
-                { type: "static", text: "أنواع المركب الإضافيز:\nمبتدأ / مفعول به / فاعل", x: "75%", y: "20%" },
-//Drag & Drop standard
-// Plusieurs réponses
-                { type: "multi", text: "درة تاريخية", hint:"مركب نعتي\nقصر الزهراء", x: "25%", y: "80%" },
-                { text: "ثرية", hint:"مفردة\nمكتبة المعهد ...", x: "75%", y: "80%" },
-
+                { type: "static", text: "أنواع المركب الإضافي:<br>مبتدأ / مفعول به<br>فاعل", x: "80%", y: "75%" },
+                { type: "multi", text: "يكون المضاف إليه<br>[مجرورًا]", x: "80%", y: "25%" },
+                { type: "multi", text: "يكون الاسم الأول [نكرة] وهو ([المضاف])<br>والاسم الثاني [معرّف] بـ (ال) وهو<br>= [المضاف إليه] =", x: "20%", y: "25%" },
+                { type: "multi", text: "مثال:<br>- فتحت سميّة [جهاز التلفاز]<br>- جمع [صاحب الأرض] الزيتون", x: "20%", y: "75%" }
             ]
         };
 
         const pool = document.getElementById('answers-pool');
         const map = document.getElementById('map-area');
         const svg = document.getElementById('lines-svg');
-        const mainNode = document.getElementById('main-node');
+        let totalBlanks = 0; 
         let solved = 0;
+        let allAnswers = []; 
 
         function initGame() {
             document.getElementById('game-title').innerText = config.title;
-            mainNode.innerText = config.mainTopic;
-    
-            // On mélange uniquement les éléments qui ne sont pas statiques pour le pool
-            const poolElements = config.elements.filter(el => el.type !== 'static');
-            const shuffled = [...poolElements].sort(() => Math.random() - 0.5);
 
-            // 1. Générer le Pool de réponses (seulement pour les non-statiques)
-            shuffled.forEach((el, index) => {
-                const dragEl = document.createElement('div');
-                dragEl.className = 'drag-item';
-                dragEl.innerText = el.text;
-                dragEl.draggable = true;
-                dragEl.id = `drag-${index}`;
-                dragEl.addEventListener('dragstart', (e) => e.dataTransfer.setData('text', el.text + '|' + dragEl.id));
-                pool.appendChild(dragEl);
+            config.elements.forEach((el) => {
+                const zone = document.createElement('div');
+                zone.className = 'node';
+                zone.style.left = el.x;
+                zone.style.top = el.y;
+
+                if (el.type === 'static') {
+                    zone.classList.add('static-node');
+                    zone.innerHTML = el.text;
+                } 
+                else if (el.type === 'multi') {
+                    let formattedText = el.text.replace(/\[([^\]]+)\]/g, (match, word) => {
+                        allAnswers.push(word);
+                        totalBlanks++;
+                        return `<span class="inline-drop" data-answer="${word}"></span>`;
+                    });
+                    
+                    zone.innerHTML = formattedText;
+
+                    setTimeout(() => {
+                        const dropZones = zone.querySelectorAll('.inline-drop');
+                        dropZones.forEach(drop => {
+                            drop.addEventListener('dragover', (e) => e.preventDefault());
+                            drop.addEventListener('drop', handleDrop);
+                        });
+                    }, 0);
+                }
+
+                map.appendChild(zone);
+                drawLine(el.x, el.y);
             });
 
-        // 2. Générer les nœuds sur la carte (statiques ET standards)
-        config.elements.forEach((el) => {
-            const zone = document.createElement('div');
-            zone.className = 'node';
-            zone.style.left = el.x;
-            zone.style.top = el.y;
-
-        if (el.type === 'static') {
-            // Configuration pour élément statique
-            zone.classList.add('static-node');
-            zone.innerText = el.text; // On affiche le texte directement
-        } else {
-            // Configuration pour élément normal (Drag & Drop)
-            zone.classList.add('drop-zone');
-            zone.innerText = el.hint || "؟";
-            zone.dataset.answer = el.text;
-            zone.dataset.hint = el.hint;
-            zone.addEventListener('dragover', (e) => e.preventDefault());
-            zone.addEventListener('drop', handleDrop);
-            
-            // On ne dessine une ligne que pour les éléments interactifs
-            drawLine(el.x, el.y);
+            const shuffledAnswers = [...allAnswers].sort(() => Math.random() - 0.5);
+            shuffledAnswers.forEach((answer, index) => {
+                const dragEl = document.createElement('div');
+                dragEl.className = 'drag-item';
+                dragEl.innerText = answer;
+                dragEl.draggable = true;
+                dragEl.id = `drag-${index}`;
+                dragEl.addEventListener('dragstart', (e) => e.dataTransfer.setData('text', answer + '|' + dragEl.id));
+                pool.appendChild(dragEl);
+            });
         }
-        map.appendChild(zone);
-    });
-}
 
         function drawLine(x, y) {
             const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
             line.setAttribute("x1", "50%"); line.setAttribute("y1", "50%");
             line.setAttribute("x2", x); line.setAttribute("y2", y);
             line.setAttribute("stroke", "#BDBDBD"); line.setAttribute("stroke-width", "3");
+            line.style.zIndex = "-1"; 
             svg.appendChild(line);
         }
 
         function handleDrop(e) {
             e.preventDefault();
-            const data = e.dataTransfer.getData('text').split('|');
-            const val = data[0]; // La réponse (ex: "منصوب")
+            
+            // التأكد من استهداف منطقة الإفلات بشكل دقيق جداً لتجنب الأخطاء
+            const dropZone = e.target.closest('.inline-drop');
+            if (!dropZone) return; 
+
+            const rawData = e.dataTransfer.getData('text');
+            if (!rawData) return;
+
+            const data = rawData.split('|');
+            // استخدام trim() لحذف أي مسافات زائدة قد تمنع التطابق
+            const val = data[0] ? data[0].trim() : ""; 
             const id = data[1];
 
-            const zone = e.target;
-            const targetAnswer = zone.dataset.answer;
-            const originalHint = zone.dataset.hint; // On récupère le texte avec "..."
+            const targetAnswer = dropZone.dataset.answer ? dropZone.dataset.answer.trim() : "";
 
-            if (val === targetAnswer && !zone.classList.contains('correct')) {
-                // --- LOGIQUE DE FUSION ---
-                // On remplace les points de suspension par la réponse en gras ou simple
-                if (originalHint.includes("...")) {
-                    zone.innerText = originalHint.replace("...", val);
-                } else {
-                    // Si pas de "...", on l'ajoute juste à la suite
-                    zone.innerText = originalHint + " " + val;
-                }
-
-                zone.classList.add('correct');
-                document.getElementById(id).style.visibility = 'hidden';
+            if (val === targetAnswer && !dropZone.classList.contains('correct')) {
+                dropZone.innerText = val; 
+                dropZone.classList.add('correct'); // هذه الكلاس ستفعل اللون الأخضر الثابت
+                
+                const draggedElement = document.getElementById(id);
+                if (draggedElement) draggedElement.style.display = 'none'; 
+                
                 solved++;
         
-                if (solved === config.elements.length) {
-                document.getElementById('victory').style.display = 'block';
+                if (solved === totalBlanks) {
+                    document.getElementById('victory').style.display = 'block';
                 }
-            } else {
-                zone.style.borderColor = 'red';
-                setTimeout(() => zone.style.borderColor = '#BDBDBD', 500);
-                }
+            } else if (!dropZone.classList.contains('correct')) {
+                dropZone.style.backgroundColor = '#FFEBEE';
+                dropZone.style.borderColor = 'red';
+                setTimeout(() => {
+                    dropZone.style.backgroundColor = '#F5F5F5';
+                    dropZone.style.borderColor = '#BDBDBD';
+                }, 500);
+            }
         }
 
         initGame();
