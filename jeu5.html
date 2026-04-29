@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>خريطة المبتدأ - التصميم النهائي</title>
+    <title>خريطة المبتدأ</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-site: #f0f7ff;
-            --main-color: #1976D2; /* اللون الأزرق للحدود */
-            --accent-color: #FF9800; /* لون الأزرار البرتقالي */
+            --main-color: #1976D2; 
+            --accent-color: #FF9800; 
             --success-color: #4CAF50;
             --home-color: #FF6B6B; 
             --text-dark: #2C3E50;
@@ -29,7 +29,7 @@
             position: relative;
         }
 
-        /* --- زر الصفحة الرئيسية --- */
+     
                 .home-btn {
             position: absolute;
             top: 20px;
@@ -53,7 +53,6 @@
             box-shadow: 0 3px 0 #D32F2F;
         }
 
-        /* --- حاوية الإجابات (الأزرار البرتقالية) --- */
         .answers-pool {
             background: white;
             padding: 20px;
@@ -83,7 +82,6 @@
             user-select: none;
         }
 
-        /* --- هيكل الخريطة --- */
         .tree-container {
             display: flex;
             flex-direction: column;
@@ -102,7 +100,6 @@
             z-index: 2;
         }
 
-        /* --- تصميم الصناديق (أبيض بحدود زرقاء) --- */
         .node {
             background: white;
             border: 2.5px solid var(--main-color);
@@ -127,7 +124,6 @@
             border-width: 3px;
         }
 
-        /* --- منطقة الإفلات --- */
         .drop-zone {
             background: #eeeeee;
             border: 2px dashed #ccc;
@@ -149,7 +145,6 @@
             border-style: solid;
         }
 
-        /* --- الخطوط --- */
         #svg-canvas {
             position: absolute;
             top: 0; left: 0;
@@ -274,7 +269,6 @@
         const pool = document.getElementById('pool');
         let solvedCount = 0;
 
-        // خلط وتوليد الأزرار
         [...rawAnswers].sort(() => Math.random() - 0.5).forEach((text, i) => {
             const btn = document.createElement('div');
             btn.className = 'drag-item';
