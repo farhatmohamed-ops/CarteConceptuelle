@@ -92,7 +92,8 @@ header h1 {
 .nav-btn {
   text-decoration: none;
   background-color: #FFFFFF;
-  color: var(--text-main);
+  color: #1E293B;
+  border: 3px solid #CBD5E1;
   font-weight: 800;
   padding: 15px 25px;
   border-radius: 20px;
@@ -100,22 +101,19 @@ header h1 {
   display: flex;
   align-items: center;
   gap: 10px;
+  box-shadow: 0 6px 0 #94A3B8;
   transition: all 0.2s ease;
 }
 
 .nav-btn:hover {
   transform: translateY(2px);
-  box-shadow: 0 3px 0 #BDBDBD;
+  box-shadow: 0 4px 0 #38BDF8;
+  border-color: #38BDF8;
+  color: #0284C7;
 }
 
-/* Couleurs vives pour les boutons */
-.nav-btn:nth-child(1) { border: 3px solid var(--color-tulip); color: #D32F2F; }
-.nav-btn:nth-child(2) { border: 3px solid var(--color-sun); color: #F57F17; }
-.nav-btn:nth-child(3) { border: 3px solid #4DD0E1; color: #00838F; }
 
-/* =========================================
-   Cartes (Welcome & Goals)
-   ========================================= */
+
 .welcome-card, .goal-card {
   background-color: var(--bg-card);
   border-radius: 35px;
@@ -208,9 +206,7 @@ header h1 {
   font-style: normal;
 }
 
-/* =========================================
-   Fin de page
-   ========================================= */
+
 .stars-row {
   font-size: 2.5rem;
   color: #FFB300;

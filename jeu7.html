@@ -88,7 +88,7 @@
             position: relative;
             width: 100%;
             max-width: 1300px;
-            height: 900px; /* Espace agrandi pour contenir tout l'arbre */
+            height: 900px; 
             background: rgba(255, 255, 255, 0.4);
             border-radius: 40px;
             border: 4px dashed var(--main-color);
@@ -102,7 +102,7 @@
             border-radius: 20px;
             font-weight: 700;
             text-align: center;
-            transform: translate(50%, -50%); /* Centrage précis (RTL) */
+            transform: translate(50%, -50%); 
             white-space: normal;     
             min-width: 140px;
             max-width: 220px;          
@@ -114,7 +114,6 @@
             z-index: 2;
         }
 
-        /* Nœud principal "المفعول به" */
         .node-main {
             background: var(--main-color);
             color: white;
@@ -125,7 +124,6 @@
             z-index: 10;
         }
 
-        /* Nœuds statiques (titres de branches) */
         .static-node {
             border-color: #9E9E9E !important;
             box-shadow: 0 4px 0 #E0E0E0;
@@ -135,7 +133,7 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            min-width: 60px;
+            min-width: 65px;
             height: 28px; 
             background: #F5F5F5;
             border: 2px dashed #BDBDBD;
@@ -179,7 +177,6 @@
             border: 5px solid var(--success-color);
         }
 
-        /* Responsive : Empiler en mobile */
         @media (max-width: 1024px) {
             .map-area { height: auto; min-height: 1200px; display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 20px; border: none; background: transparent; }
             .node { position: relative; transform: none; right: auto !important; top: auto !important; margin: 0; max-width: 90%; }
@@ -213,7 +210,6 @@
     </div>
 
     <script>
-        // تعريف عناصر الخريطة (الإحداثيات px و py هي إحداثيات العقدة الأب لرسم الخطوط)
         const config = {
             elements: [
                 // الفرع الأيمن: التعريف
@@ -221,7 +217,7 @@
                 { type: "static", text: "مثال:<br>أكل الولدُ التفاحةَ.<br>الفعل: أكل<br>الفاعل: الولد<br>المفعول به: التفاحة", x: "15%", y: "45%", px: "15%", py: "22%" },
 
                 // الفرع الأوسط: الإعراب
-                { type: "multi", text: "إعرابه:<br>المفعول به يرد دائماً [منصوبا]    .", x: "50%", y: "25%", px: "50%", py: "8%" },
+                { type: "multi", text: "إعرابه:<br>المفعول به يرد دائماً [منصوبا]     .", x: "50%", y: "25%", px: "50%", py: "8%" },
 
                 // الفرع الأيسر: الأشكال النحوية
                 { type: "static", text: "أشكاله النحوية:<br>يرد المفعول به في أشكال نحوية متعدّدة", x: "85%", y: "22%", px: "50%", py: "8%" },
@@ -235,7 +231,8 @@
 
                 // أنواع المركبات والأمثلة (الصف السفلي)
                 { type: "multi", text: "مركب بالبدل<br>(مبدل منه + بدل)<br>مثال: زرع الفلاح [ذلك] [الحقل]", x: "93%", y: "75%", px: "90%", py: "45%" },
-                { type: "multi", text: "مركب بالعطف<br>(معطوف عليه + معطوف)<br>مثال: لبس الطفل [حذاء] و[قبعة]", x: "75%", y: "75%", px: "90%", py: "45%" },
+                // Nettoyage des espaces ici pour éviter les erreurs de comparaison au drop
+                { type: "multi", text: "مركب بالعطف<br>(معطوف عليه + معطوف)<br>مثال: لبس الطفل [حذاء|قبعة] و[حذاء|قبعة]", x: "75%", y: "75%", px: "90%", py: "45%" },
                 { type: "multi", text: "مركب نعتي<br>(منعوت + نعت)<br>مثال: يعين الشيخ [الجار] [الفقير]", x: "55%", y: "75%", px: "90%", py: "45%" },
                 { type: "multi", text: "مركب إضافي<br>(مضاف + مضاف إليه)<br>مثال: استمع التلاميذ [نصيحة] [المعلم]", x: "35%", y: "75%", px: "90%", py: "45%" },
                 { type: "multi", text: "مركب بالجر<br>(جار + مجرور)<br>مثال: دافع الحارس [عن] [المرمى]", x: "15%", y: "75%", px: "90%", py: "45%" }
@@ -262,9 +259,22 @@
                 } 
                 else if (el.type === 'multi') {
                     let formattedText = el.text.replace(/\[([^\]]+)\]/g, (match, word) => {
-                        allAnswers.push(word);
                         totalBlanks++;
-                        return `<span class="inline-drop" data-answer="${word}"></span>`;
+                        let cleanedWord = word.trim();
+                        
+                        if (cleanedWord.includes('|')) {
+                            let options = cleanedWord.split('|');
+                            options.forEach(opt => {
+                                if(!allAnswers.includes(opt.trim())) {
+                                    allAnswers.push(opt.trim());
+                                }
+                            });
+                        } else {
+                            if(!allAnswers.includes(cleanedWord)) {
+                                allAnswers.push(cleanedWord);
+                            }
+                        }
+                        return `<span class="inline-drop" data-answer="${cleanedWord}"></span>`;
                     });
                     
                     zone.innerHTML = formattedText;
@@ -279,7 +289,6 @@
                 }
 
                 map.appendChild(zone);
-                // رسم الخط بين العقدة الأب والعقدة الحالية
                 if(el.px && el.py) {
                     drawLine(el.px, el.py, el.x, el.y);
                 }
@@ -298,11 +307,8 @@
             });
         }
 
-        // دالة رسم الخطوط لتربط بين العقد (دعم الشاشات العريضة)
         function drawLine(startX, startY, endX, endY) {
             const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-            
-            // بما أننا نستخدم "right" في الـ CSS (RTL)، نحول النسبة المئوية لمحور الـ X في الـ SVG
             const x1 = 100 - parseFloat(startX) + "%"; 
             const x2 = 100 - parseFloat(endX) + "%"; 
             
@@ -328,10 +334,14 @@
 
             const targetAnswer = dropZone.dataset.answer ? dropZone.dataset.answer.trim() : "";
 
-            if (val === targetAnswer && !dropZone.classList.contains('correct')) {
+            // Correction ici : la logique de validation prend maintenant correctement en compte le séparateur '|'
+            const isCorrect = val === targetAnswer || (targetAnswer.includes('|') && targetAnswer.split('|').map(x => x.trim()).includes(val));
+
+            if (isCorrect && !dropZone.classList.contains('correct')) {
                 dropZone.innerText = val; 
                 dropZone.classList.add('correct'); 
                 
+                // Optionnel : Cache le mot du pool uniquement si nécessaire ou laisse tel quel pour réutilisation
                 const draggedElement = document.getElementById(id);
                 if (draggedElement) draggedElement.style.display = 'none'; 
                 
@@ -341,7 +351,6 @@
                     document.getElementById('victory').style.display = 'block';
                 }
             } else if (!dropZone.classList.contains('correct')) {
-                // تأثير بصري عند الإجابة الخاطئة
                 dropZone.style.backgroundColor = '#FFEBEE';
                 dropZone.style.borderColor = 'red';
                 setTimeout(() => {
